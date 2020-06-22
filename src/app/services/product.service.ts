@@ -31,6 +31,14 @@ export class ProductService {
       map( response => response._embedded.productCategory)
     );
   }
+
+  getSearchProducts(searchedName: string): Observable<Product[]> {
+    const searchUrl = `${this.baseUrl}products/search/findByNameContaining?name=${searchedName}`;
+    console.log("getSearchProducts - searchUrl = " + searchUrl);
+    return this.httpClient.get<GetProductsResponse>(searchUrl).pipe(
+      map(response => response._embedded.products)
+    );
+  }
 }
 
 // unwraps the JSON gathered from API _embedded entry
