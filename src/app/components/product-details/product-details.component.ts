@@ -22,9 +22,7 @@ export class ProductDetailsComponent implements OnInit {
 
   private listProductDetails() {
     const hasId: boolean = this.route.snapshot.paramMap.has('id');
-    if (!hasId) {
-      this.router.navigateByUrl('products');
-    }
+    if (!hasId) { this.router.navigateByUrl('products'); }
 
     const id: number = +this.route.snapshot.paramMap.get('id');
     this.productService.getProductDetails(id).subscribe(
@@ -33,6 +31,5 @@ export class ProductDetailsComponent implements OnInit {
         console.log("product data = ", data);
       }
     );
-
   }
 }

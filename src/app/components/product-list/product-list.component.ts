@@ -10,10 +10,16 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class ProductListComponent implements OnInit {
 
-  products: Product[];
-  currentCategoryId: number;
+  products: Product[] = [];
+  currentCategoryId = 1;
+  previousCategoryId = 1;
   currentCategoryName: string;
-  searchMode: boolean;
+  searchMode = false;
+
+  // pagination properties
+  pageNumber = 1;
+  pageSize = 10;
+  totalElements = 0;
 
   constructor(private productService: ProductService,
               private route: ActivatedRoute,
@@ -37,8 +43,18 @@ export class ProductListComponent implements OnInit {
     this.currentCategoryId = hasCategoryId ? +this.route.snapshot.paramMap.get('id') : 1;
     this.currentCategoryName = hasCategoryId ? this.route.snapshot.paramMap.get('name') : 'Books';
 
-    this.productService.getProductList(this.currentCategoryId).subscribe(
-      data =>  this.products = data
+    // check if we have a different category than previous, because angular reuses components that are displayed
+    //  =  ? 1 : this.pageNumber;
+    if (this.previousCategoryId != this.currentCategoryId) {
+      console.log("previousCategoryId = " + this.previousCategoryId + " || currentCategoryId = " + this.currentCategoryId);
+      this.pageNumber = 1;
+    }
+
+    this.previousCategoryId = this.currentCategoryId;
+    console.log(`currentCategoryId=${this.currentCategoryId}, pageNumber=${this.pageNumber}`);
+
+    this.productService.getProductListPaginate(this.pageNumber - 1, this.pageSize, this.currentCategoryId).subscribe(
+      this.processResult()
     );
   }
 
@@ -50,7 +66,14 @@ export class ProductListComponent implements OnInit {
     );
   }
 
-  checkProductDetails(sku: string) {
-    this.router.navigateByUrl(`/products/${sku}`);
+  private processResult() {
+    return data => {
+      this.products = data._embedded.products;
+      console.log("page data = ", data.page);
+      this.pageNumber = data.page.number + 1; // 0 and 1 based.
+      this.pageSize = data.page.size;
+      this.totalElements = data.page.totalElements;
+    };
   }
 }
+
