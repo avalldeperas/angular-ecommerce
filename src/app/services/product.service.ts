@@ -14,11 +14,11 @@ export class ProductService {
   constructor(private httpClient: HttpClient) { }
 
   getProductList(currentCategoryId: number): Observable<Product[]> {
-    const url = this.baseUrl + "products";
-    console.log("getProducts() - url = " + url);
+    const searchUrl = `${this.baseUrl}products/search/findByCategoryId?id=${currentCategoryId}`;
+    console.log("getProducts() - url = " + searchUrl);
 
-    // TODO build URL based on categoryId
-    return this.httpClient.get<GetResponse>(url).pipe(
+    // build URL based on categoryId
+    return this.httpClient.get<GetResponse>(searchUrl).pipe(
       map(response => response._embedded.products)
     );
   }
