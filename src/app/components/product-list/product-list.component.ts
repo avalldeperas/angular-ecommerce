@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ProductService} from '../../services/product.service';
 import {Product} from '../../common/product';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
@@ -16,7 +16,8 @@ export class ProductListComponent implements OnInit {
   searchMode: boolean;
 
   constructor(private productService: ProductService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit(): void {
     console.log("ProductListComponent - ngOnInit()");
@@ -49,4 +50,7 @@ export class ProductListComponent implements OnInit {
     );
   }
 
+  checkProductDetails(sku: string) {
+    this.router.navigateByUrl(`/products/${sku}`);
+  }
 }

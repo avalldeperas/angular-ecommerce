@@ -39,6 +39,13 @@ export class ProductService {
       map( response => response._embedded.productCategory)
     );
   }
+
+  getProductDetails(id: number): Observable<Product>{
+    /** http://localhost:8080/api/products/1   */
+    const productDetailsUrl = `${this.baseUrl}/products/${id}`;
+    console.log("getProductDetails - productDetailsUrl = " + productDetailsUrl);
+    return this.httpClient.get<Product>(productDetailsUrl);
+  }
 }
 
 // unwraps the JSON gathered from API _embedded entry
@@ -53,3 +60,4 @@ interface GetProductCategoriesResponse {
     productCategory: ProductCategory[];
   };
 }
+

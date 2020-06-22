@@ -11,11 +11,6 @@ export class SearchComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    this.listProductsByName();
-  }
-
-  private listProductsByName() {
-    console.log('listingProucts by its name');
   }
 
   doSearch(value: string) {
