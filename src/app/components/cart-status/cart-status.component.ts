@@ -26,4 +26,8 @@ export class CartStatusComponent implements OnInit {
       this.totalPrice = data
     );
   }
+
+  checkCartDetails() {
+    console.log("you clicked on cart icon!");
+  }
 }
