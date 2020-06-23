@@ -91,5 +91,10 @@ export class ProductListComponent implements OnInit {
     this.pageNumber = 1;
     this.listProducts();
   }
+
+  addToCart(tempProduct: Product) {
+    console.log('ADDED TO CART! - Product = ', tempProduct);
+
+  }
 }
 
