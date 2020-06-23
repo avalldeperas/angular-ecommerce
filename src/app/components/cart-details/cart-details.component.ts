@@ -33,4 +33,17 @@ export class CartDetailsComponent implements OnInit {
 
     this.cartService.computeCartTotals();
   }
+
+  incrementQuantity(tempCartItem: CartItem) {
+    console.log('incrementQuantity');
+  }
+
+  decrementQuantity(tempCartItem: CartItem) {
+    console.log('decrementQuantity');
+
+  }
+
+  remove(tempCartItem: CartItem) {
+    console.log("remove");
+  }
 }
