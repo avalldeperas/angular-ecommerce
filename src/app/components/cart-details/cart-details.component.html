@@ -27,7 +27,7 @@
                 <label>Quantity:</label>
                 <div class="row no-gutters">
                   <div class="col">
-                      <button class="btn btn-primary btn-sm">
+                      <button (click)="incrementQuantity(tempCartItem)" class="btn btn-primary btn-sm">
                         <i class="fas fa-plus"></i>
                       </button>
                   </div>
@@ -35,13 +35,16 @@
                     {{tempCartItem.quantity}}
                   </div>
                   <div class="col">
-                    <button class="btn btn-primary btn-sm">
+                    <button (click)="decrementQuantity(tempCartItem)" class="btn btn-primary btn-sm">
                       <i class="fas fa-minus"></i>
                     </button>
                   </div>
                   <div class="col-8"></div>
                 </div>
               </div>
+
+              <button (click)="remove(tempCartItem)" class="btn btn-primary btn-sm mt-2">Remove</button>
+
               <p class="mt-2">Sub-total {{tempCartItem.unitPrice * tempCartItem.quantity | currency: 'EUR'}}</p>
             </td>
 
@@ -59,7 +62,9 @@
 
       </div>
 
-      <div *ngIf="cartItems?.length == 0" class="alert alert-warning col-md-12" role="alert">Your Shopping Cart is empty</div>
+      <div *ngIf="cartItems?.length == 0" class="alert alert-warning col-md-12" role="alert">
+        Your Shopping Cart is empty
+      </div>
 
     </div>
   </div>

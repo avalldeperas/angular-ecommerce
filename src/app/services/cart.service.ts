@@ -50,4 +50,19 @@ export class CartService {
     console.log(`totalPrice: ${totalPriceValue.toFixed(2)}, totalQuantity: ${totalQuantityValue}`);
     console.log("----");
   }
+
+  removeFromCart(cartItem: CartItem) {
+    console.log(`CartService - removeFromCart() - CartItem name: ${cartItem.name}, unitPrice: ${cartItem.unitPrice}`);
+    // const existingCartItem = this.cartItems.find(tempCartItem => tempCartItem.id === cartItem.id);
+    cartItem.quantity--;
+    cartItem.quantity === 0 ? this.remove(cartItem) : this.computeCartTotals();
+  }
+
+  remove(cartItem: CartItem) {
+    const itemIndex = this.cartItems.findIndex(tmpCartItem => tmpCartItem.id === cartItem.id);
+    if (itemIndex > -1) {
+        this.cartItems.splice(itemIndex, 1);
+        this.computeCartTotals();
+    }
+  }
 }
