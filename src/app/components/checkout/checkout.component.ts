@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {first} from 'rxjs/operators';
 
 @Component({
   selector: 'app-checkout',
@@ -7,9 +9,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CheckoutComponent implements OnInit {
 
-  constructor() { }
+  checkoutFormGroup: FormGroup;
+
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
+    this.handleFormGroup();
   }
 
+  private handleFormGroup() {
+    this.checkoutFormGroup = new FormGroup({
+      customer: new FormGroup({
+        firstName: new FormControl(),
+        lastName: new FormControl()
+      })
+    });
+  }
+
+  onSubmit() {
+    const customerFormValues = this.checkoutFormGroup.get('customer').value;
+    console.log("firstName = ", customerFormValues);
+  }
 }
