@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Product} from '../../common/product';
+import {CartService} from '../../services/cart.service';
 
 @Component({
   selector: 'app-cart-status',
@@ -8,11 +9,21 @@ import {Product} from '../../common/product';
 })
 export class CartStatusComponent implements OnInit {
 
-  cartProducts = {} as Product[];
+  totalQuantity: number = 0;
+  totalPrice: number = 0;
 
-  constructor() { }
+  constructor(private cartService: CartService) { }
 
   ngOnInit(): void {
+    this.updateCartStatus();
   }
 
+  private updateCartStatus() {
+    this.cartService.totalQuantity.subscribe(data =>
+      this.totalQuantity = data
+    );
+    this.cartService.totalPrice.subscribe(data =>
+      this.totalPrice = data
+    );
+  }
 }
