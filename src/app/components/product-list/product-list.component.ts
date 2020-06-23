@@ -18,12 +18,13 @@ export class ProductListComponent implements OnInit {
 
   // pagination properties
   pageNumber = 1;
-  pageSize = 10;
+  pageSize = 5;
   totalElements = 0;
 
+  previousKeyword: string = null;
+
   constructor(private productService: ProductService,
-              private route: ActivatedRoute,
-              private router: Router) { }
+              private route: ActivatedRoute){ }
 
   ngOnInit(): void {
     console.log("ProductListComponent - ngOnInit()");
@@ -45,7 +46,7 @@ export class ProductListComponent implements OnInit {
 
     // check if we have a different category than previous, because angular reuses components that are displayed
     //  =  ? 1 : this.pageNumber;
-    if (this.previousCategoryId != this.currentCategoryId) {
+    if (this.previousCategoryId !== this.currentCategoryId) {
       console.log("previousCategoryId = " + this.previousCategoryId + " || currentCategoryId = " + this.currentCategoryId);
       this.pageNumber = 1;
     }
@@ -53,16 +54,25 @@ export class ProductListComponent implements OnInit {
     this.previousCategoryId = this.currentCategoryId;
     console.log(`currentCategoryId=${this.currentCategoryId}, pageNumber=${this.pageNumber}`);
 
-    this.productService.getProductListPaginate(this.pageNumber - 1, this.pageSize, this.currentCategoryId).subscribe(
-      this.processResult()
-    );
+    this.productService.getProductListPaginate(this.pageNumber - 1, this.pageSize, this.currentCategoryId)
+      .subscribe(
+        this.processResult()
+      );
   }
 
   private handleSearchProducts() {
     console.log("inside handleSearchProducts()");
-    const keyword = this.route.snapshot.paramMap.get('keyword');
-    this.productService.getSearchProducts(keyword).subscribe(
-      data => this.products = data
+    const currentKeyword = this.route.snapshot.paramMap.get('keyword');
+
+    if (this.previousKeyword !== currentKeyword){
+      this.pageNumber = 1;
+    }
+
+    this.previousKeyword = currentKeyword;
+    console.log(`keyword = ${currentKeyword}, pageNumber = ${this.pageNumber}`);
+
+    this.productService.searchProductsPaginate(this.pageNumber - 1, this.pageSize, currentKeyword).subscribe(
+      this.processResult()
     );
   }
 
@@ -74,6 +84,12 @@ export class ProductListComponent implements OnInit {
       this.pageSize = data.page.size;
       this.totalElements = data.page.totalElements;
     };
+  }
+
+  updatePageSize(pageSize: number) {
+    this.pageSize = pageSize;
+    this.pageNumber = 1;
+    this.listProducts();
   }
 }
 
