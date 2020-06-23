@@ -17,15 +17,7 @@ export class CartService {
 
   addToCart(cartItem: CartItem){
     console.log(`CartService - addToCart() - CartItem name: ${cartItem.name}, unitPrice: ${cartItem.unitPrice}`);
-    let existingCartItem: CartItem;
-
-    for (const tempCartItem of this.cartItems){
-      if (tempCartItem.id === cartItem.id) {
-        existingCartItem = tempCartItem;
-        break;
-      }
-    }
-
+    const existingCartItem = this.cartItems.find(tempCartItem => tempCartItem.id === cartItem.id);
     existingCartItem !== undefined ? existingCartItem.quantity++ : this.cartItems.push(cartItem);
     this.computeCartTotals();
   }
