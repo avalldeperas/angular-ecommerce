@@ -10,7 +10,8 @@ import {ProductCategory} from '../common/product-category';
 })
 export class ProductService {
 
-  private baseUrl = "http://localhost:8080/api/";
+  // private baseUrl = "http://localhost:8080/api/";
+  private raspberryPiBaseUrl = "http://192.168.1.46:8080/api/";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -21,13 +22,13 @@ export class ProductService {
   // }
 
   getProductListPaginate(thePage: number, thePageSize: number, currentCategoryId: number): Observable<GetProductsResponse> {
-    const searchUrl = `${this.baseUrl}products/search/findByCategoryId?id=${currentCategoryId}&page=${thePage}&size=${thePageSize}`;
+    const searchUrl = `${this.raspberryPiBaseUrl}products/search/findByCategoryId?id=${currentCategoryId}&page=${thePage}&size=${thePageSize}`;
     console.log("getProductListPaginate() - url = " + searchUrl);
     return this.httpClient.get<GetProductsResponse>(searchUrl);
   }
 
   searchProductsPaginate(thePage: number, thePageSize: number, keyword: string): Observable<GetProductsResponse> {
-    const searchUrl = `${this.baseUrl}products/search/findByNameContaining?name=${keyword}&page=${thePage}&size=${thePageSize}`;
+    const searchUrl = `${this.raspberryPiBaseUrl}products/search/findByNameContaining?name=${keyword}&page=${thePage}&size=${thePageSize}`;
     console.log("getSearchProductsPaginate() - searchUrl = " + searchUrl);
     return this.getProducts(searchUrl);
   }
@@ -37,7 +38,7 @@ export class ProductService {
   }
 
   getProductCategories(): Observable<ProductCategory[]> {
-    const categoriesUrl = `${this.baseUrl}product-category`;
+    const categoriesUrl = `${this.raspberryPiBaseUrl}product-category`;
     console.log("inside getProductCategories - url = " + categoriesUrl);
     return this.httpClient.get<GetProductCategoriesResponse>(categoriesUrl).pipe(
       map( response => response._embedded.productCategory)
@@ -46,7 +47,7 @@ export class ProductService {
 
   getProductDetails(id: number): Observable<Product>{
     /** http://localhost:8080/api/products/1   */
-    const productDetailsUrl = `${this.baseUrl}/products/${id}`;
+    const productDetailsUrl = `${this.raspberryPiBaseUrl}products/${id}`;
     console.log("getProductDetails - productDetailsUrl = " + productDetailsUrl);
     return this.httpClient.get<Product>(productDetailsUrl);
   }

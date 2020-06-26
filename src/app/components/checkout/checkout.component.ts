@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {first} from 'rxjs/operators';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {MyFormService} from '../../services/my-form.service';
 
 @Component({
@@ -26,14 +25,11 @@ export class CheckoutComponent implements OnInit {
 
   private initCreditCardFormData() {
     this.myFormService.getCreditCardYears().subscribe(data => {
-      console.log("Years gathered from service = ", data);
       this.creditCardYears = data;
     });
 
     const startMonth = new Date().getMonth() + 1;
-    console.log('startMonth = ' + startMonth);
     this.myFormService.getCreditCardMonths(startMonth).subscribe(data => {
-      console.log('Retrieved month from service = ', data);
       this.creditCardMonths = data;
     });
   }
@@ -83,5 +79,18 @@ export class CheckoutComponent implements OnInit {
     event.target.checked ?
       this.checkoutFormGroup.controls.billingAddress.setValue(this.checkoutFormGroup.controls.shippingAddress.value)
       : this.checkoutFormGroup.controls.billingAddress.reset();
+  }
+
+  handleMonthAndYears() {
+    const creditCardFormGroup = this.checkoutFormGroup.get('creditCard');
+
+    const currentYear: number = new Date().getFullYear();
+    const selectedYear: number = Number(creditCardFormGroup.value.expirationYear);
+
+    const startMonth = selectedYear === currentYear ? new Date().getMonth() + 1 : 1;
+
+    this.myFormService.getCreditCardMonths(startMonth).subscribe(data => {
+        this.creditCardMonths = data;
+    });
   }
 }
